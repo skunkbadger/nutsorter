@@ -14,7 +14,8 @@ public class ListSplitterNutSorterImpl implements NutSorter {
     private final String ALGORITHM_NAME = "list splitter";
 
     private final ConcurrentHashMap<Nut, Bolt> sortedNutsAndBolts;
-    private Long iteration;
+    private Long recursions;
+    private Long iterations;
 
     ListSplitterNutSorterImpl() {
         sortedNutsAndBolts = new ConcurrentHashMap<>();
@@ -22,9 +23,10 @@ public class ListSplitterNutSorterImpl implements NutSorter {
 
     public ConcurrentHashMap<Nut, Bolt> matchMyNutsAndBolts(final List<Nut> nuts,
                                                             final List<Bolt> bolts) {
-        iteration = 0L;
+        recursions = 0L;
+        iterations = 0L;
         checkForRecursion(nuts, bolts);
-        LoggingUtils.logSorted(sortedNutsAndBolts, iteration, ALGORITHM_NAME);
+        LoggingUtils.logSorted(sortedNutsAndBolts, recursions, iterations, ALGORITHM_NAME);
         return sortedNutsAndBolts;
     }
 
@@ -49,8 +51,8 @@ public class ListSplitterNutSorterImpl implements NutSorter {
     private void doSort(final List<Nut> nuts,
                         final List<Bolt> bolts) {
         final long currentIteration;
-        synchronized (iteration) {
-            currentIteration = ++iteration;
+        synchronized (recursions) {
+            currentIteration = ++recursions;
         }
         final Bolt pivotBolt;
         Nut pivotNut = null;
@@ -61,6 +63,7 @@ public class ListSplitterNutSorterImpl implements NutSorter {
         final List smallerNuts = new ArrayList<Nut>();
         final List largerNuts = new ArrayList<Nut>();
         for (final Nut nut : nuts) {
+            iterations++;
             final ComparisonValue comparison = nut.compareToBolt(pivotBolt);
             switch (comparison) {
                 case EQUAL:
@@ -82,6 +85,7 @@ public class ListSplitterNutSorterImpl implements NutSorter {
         final List smallerBolts = new ArrayList<Bolt>();
         final List largerBolts = new ArrayList<Bolt>();
         for (final Bolt bolt : bolts) {
+            iterations++;
             if (bolt.equals(pivotBolt)) {
                 continue;
             }

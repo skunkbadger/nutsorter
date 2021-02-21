@@ -15,7 +15,8 @@ interface LoggingUtils {
     }
 
     static void logSorted(final Map<Nut, Bolt> sortedNutsAndBolts,
-                          final long iteration,
+                          final long recursions,
+                          final long iterations,
                           final String algoritm) {
         final StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("\n--");
@@ -26,7 +27,9 @@ interface LoggingUtils {
             stringBuffer.append("\n\n--");
         }
         stringBuffer.append("\n\n");
-        stringBuffer.append("Iterations: " + iteration);
+        stringBuffer.append("Recursions: " + recursions);
+        stringBuffer.append("\n");
+        stringBuffer.append("Iterations: " + iterations);
         stringBuffer.append("\n");
         stringBuffer.append("Sorted count: " + sortedNutsAndBolts.size());
         System.out.println(stringBuffer.toString());

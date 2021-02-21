@@ -11,7 +11,8 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
 
     private final static String ALGORITHM_NAME = "binary tree";
     private final ConcurrentHashMap<Nut, Bolt> sortedNutsAndBolts;
-    private Long iteration;
+    private Long recursions;
+    private Long iterations;
 
     BinaryTreeNutSorterImpl() {
         sortedNutsAndBolts = new ConcurrentHashMap<>();
@@ -19,16 +20,17 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
 
     public ConcurrentHashMap<Nut, Bolt> matchMyNutsAndBolts(final List<Nut> nuts,
                                                             final List<Bolt> bolts) {
-        iteration = 0L;
+        iterations = 0L;
+        recursions = 0L;
         final NutNode masterNode = new NutNode(nuts);
         bolts.forEach(bolt -> doSort(masterNode, bolt));
-        LoggingUtils.logSorted(sortedNutsAndBolts, iteration, ALGORITHM_NAME);
+        LoggingUtils.logSorted(sortedNutsAndBolts, recursions, iterations, ALGORITHM_NAME);
         return sortedNutsAndBolts;
     }
 
     boolean doSort(final NutNode node,
                    final Bolt pivotBolt) {
-        iteration++;
+        recursions++;
         boolean hasMatch = false;
         boolean didSorting = false;
         final List<Nut> nodeNuts = node.getNuts();
@@ -36,6 +38,7 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
             final List<Nut> smallerNuts = new ArrayList<>();
             final List<Nut> largerNuts = new ArrayList<>();
             for (final Nut nut : nodeNuts) {
+                iterations++;
                 final ComparisonValue comparison = nut.compareToBolt(pivotBolt);
                 switch (comparison) {
                     case EQUAL:
