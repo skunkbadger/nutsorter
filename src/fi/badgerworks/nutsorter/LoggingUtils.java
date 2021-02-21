@@ -18,13 +18,13 @@ interface LoggingUtils {
                           final long iteration,
                           final String algoritm) {
         final StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("\n--");
+        stringBuffer.append("\n\n");
+        stringBuffer.append("Matched results with algorithm (" + algoritm + "):");
         if (ENABLE_DEBUG_LOGGING || PRINT_RESULTS) {
-            stringBuffer.append("\n--");
-            stringBuffer.append("\n\n");
-            stringBuffer.append("Matched results with algorithm (" + algoritm + "):");
             sortedNutsAndBolts.entrySet().forEach(entry -> stringBuffer.append("\nNut: " + entry.getKey().getName() + ", Bolt: " + entry.getValue().getName() + " Sizes: [" + entry.getKey().getSize() + "/" + entry.getValue().getSize() + "]"));
+            stringBuffer.append("\n\n--");
         }
-        stringBuffer.append("\n\n--");
         stringBuffer.append("\n\n");
         stringBuffer.append("Iterations: " + iteration);
         stringBuffer.append("\n");
