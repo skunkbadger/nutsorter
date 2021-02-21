@@ -2,6 +2,7 @@ package fi.badgerworks.nutsorter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static fi.badgerworks.nutsorter.Main.ENABLE_DEBUG_LOGGING;
 import static fi.badgerworks.nutsorter.Main.PRINT_RESULTS;
@@ -15,8 +16,8 @@ interface LoggingUtils {
     }
 
     static void logSorted(final Map<Nut, Bolt> sortedNutsAndBolts,
-                          final long recursions,
-                          final long iterations,
+                          final AtomicInteger recursions,
+                          final AtomicInteger iterations,
                           final String algoritm) {
         final StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("\n--");

@@ -5,26 +5,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static fi.badgerworks.nutsorter.ComparisonValue.EQUAL;
 import static fi.badgerworks.nutsorter.LoggingUtils.logError;
+import static fi.badgerworks.nutsorter.Main.LIST_SPLITTER_PARALLELISM_ENABLED;
 
 public class ListSplitterNutSorterImpl implements NutSorter {
 
     private final String ALGORITHM_NAME = "list splitter";
 
     private final ConcurrentHashMap<Nut, Bolt> sortedNutsAndBolts;
-    private Long recursions;
-    private Long iterations;
+    private AtomicInteger recursions;
+    private AtomicInteger iterations;
 
     ListSplitterNutSorterImpl() {
         sortedNutsAndBolts = new ConcurrentHashMap<>();
+        recursions = new AtomicInteger();
+        iterations = new AtomicInteger();
     }
 
     public ConcurrentHashMap<Nut, Bolt> matchMyNutsAndBolts(final List<Nut> nuts,
                                                             final List<Bolt> bolts) {
-        recursions = 0L;
-        iterations = 0L;
+        recursions.set(0);
+        iterations.set(0);
         checkForRecursion(nuts, bolts);
         LoggingUtils.logSorted(sortedNutsAndBolts, recursions, iterations, ALGORITHM_NAME);
         return sortedNutsAndBolts;
@@ -50,10 +54,8 @@ public class ListSplitterNutSorterImpl implements NutSorter {
 
     private void doSort(final List<Nut> nuts,
                         final List<Bolt> bolts) {
-        final long currentIteration;
-        synchronized (recursions) {
-            currentIteration = ++recursions;
-        }
+        final int currentIteration;
+        currentIteration = recursions.getAndAdd(1);
         final Bolt pivotBolt;
         Nut pivotNut = null;
         pivotBolt = bolts.get(0);
@@ -64,7 +66,7 @@ public class ListSplitterNutSorterImpl implements NutSorter {
         final List largerNuts = new ArrayList<Nut>();
         boolean matchFound = false;
         for (final Nut nut : nuts) {
-            iterations++;
+            iterations.addAndGet(1);
             final ComparisonValue comparison = nut.compareToBolt(pivotBolt);
             switch (comparison) {
                 case EQUAL:
@@ -91,7 +93,7 @@ public class ListSplitterNutSorterImpl implements NutSorter {
         final List smallerBolts = new ArrayList<Bolt>();
         final List largerBolts = new ArrayList<Bolt>();
         for (final Bolt bolt : bolts) {
-            iterations++;
+            iterations.addAndGet(1);
             if (bolt.equals(pivotBolt)) {
                 continue;
             }
@@ -114,16 +116,21 @@ public class ListSplitterNutSorterImpl implements NutSorter {
         LoggingUtils.logNutsAndBolts(pivotNut, pivotBolt, nuts, bolts, currentIteration);
         sortedNutsAndBolts.put(pivotNut, pivotBolt);
 
-        parallelProcessNutsAndBolts(smallerNuts, smallerBolts, largerNuts, largerBolts);
+        processNutsAndBolts(smallerNuts, smallerBolts, largerNuts, largerBolts);
     }
 
-    private void parallelProcessNutsAndBolts(final List<Nut> smallerNuts,
-                                             final List<Bolt> smallerBolts,
-                                             final List<Nut> largerNuts,
-                                             final List<Bolt> largerBolts) {
-        final Map<List<Nut>, List<Bolt>> parallelProcessingMap = new HashMap<>();
-        parallelProcessingMap.put(smallerNuts, smallerBolts);
-        parallelProcessingMap.put(largerNuts, largerBolts);
-        parallelProcessingMap.entrySet().parallelStream().forEach(entry -> checkForRecursion(entry.getKey(), entry.getValue()));
+    private void processNutsAndBolts(final List<Nut> smallerNuts,
+                                     final List<Bolt> smallerBolts,
+                                     final List<Nut> largerNuts,
+                                     final List<Bolt> largerBolts) {
+        if (LIST_SPLITTER_PARALLELISM_ENABLED) {
+            final Map<List<Nut>, List<Bolt>> parallelProcessingMap = new HashMap<>();
+            parallelProcessingMap.put(smallerNuts, smallerBolts);
+            parallelProcessingMap.put(largerNuts, largerBolts);
+            parallelProcessingMap.entrySet().parallelStream().forEach(entry -> checkForRecursion(entry.getKey(), entry.getValue()));
+        } else {
+            checkForRecursion(smallerNuts, smallerBolts);
+            checkForRecursion(largerNuts, largerBolts);
+        }
     }
 }

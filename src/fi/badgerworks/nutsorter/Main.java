@@ -9,6 +9,7 @@ import static fi.badgerworks.nutsorter.Scrambler.scrambleNutsAndBolts;
 
 public class Main {
 
+    final static boolean LIST_SPLITTER_PARALLELISM_ENABLED = false;
     final static boolean ENABLE_DEBUG_LOGGING = false;
     final static boolean PRINT_RESULTS = true;
 

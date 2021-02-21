@@ -3,6 +3,7 @@ package fi.badgerworks.nutsorter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static fi.badgerworks.nutsorter.ComparisonValue.EQUAL;
 import static fi.badgerworks.nutsorter.LoggingUtils.logError;
@@ -11,17 +12,19 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
 
     private final static String ALGORITHM_NAME = "binary tree";
     private final ConcurrentHashMap<Nut, Bolt> sortedNutsAndBolts;
-    private Long recursions;
-    private Long iterations;
+    private AtomicInteger recursions;
+    private AtomicInteger iterations;
 
     BinaryTreeNutSorterImpl() {
         sortedNutsAndBolts = new ConcurrentHashMap<>();
+        recursions = new AtomicInteger();
+        iterations = new AtomicInteger();
     }
 
     public ConcurrentHashMap<Nut, Bolt> matchMyNutsAndBolts(final List<Nut> nuts,
                                                             final List<Bolt> bolts) {
-        iterations = 0L;
-        recursions = 0L;
+        iterations.set(0);
+        recursions.set(0);
         final NutNode masterNode = new NutNode(nuts);
         bolts.forEach(bolt -> doSort(masterNode, bolt));
         LoggingUtils.logSorted(sortedNutsAndBolts, recursions, iterations, ALGORITHM_NAME);
@@ -30,7 +33,7 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
 
     boolean doSort(final NutNode node,
                    final Bolt pivotBolt) {
-        recursions++;
+        recursions.addAndGet(1);
         boolean hasMatch = false;
         boolean didSorting = false;
         final List<Nut> nodeNuts = node.getUnorderedNuts();
@@ -39,7 +42,7 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
             final List<Nut> largerNuts = new ArrayList<>();
             final List<Nut> equalNuts = new ArrayList<>();
             for (final Nut nut : nodeNuts) {
-                iterations++;
+                iterations.addAndGet(1);
                 final ComparisonValue comparison = nut.compareToBolt(pivotBolt);
                 switch (comparison) {
                     case EQUAL:
