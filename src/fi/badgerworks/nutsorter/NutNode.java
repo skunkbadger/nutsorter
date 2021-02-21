@@ -40,12 +40,12 @@ class NutNode {
         return rightChildNode;
     }
 
-    boolean hasRightChildNode() {
-        return rightChildNode != null;
-    }
-
     void setRightChildNode(final NutNode rightChildNode) {
         this.rightChildNode = rightChildNode;
+    }
+
+    boolean hasRightChildNode() {
+        return rightChildNode != null;
     }
 
     Nut getNut() {

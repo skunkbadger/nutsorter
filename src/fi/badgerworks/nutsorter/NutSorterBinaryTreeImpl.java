@@ -57,7 +57,7 @@ public class NutSorterBinaryTreeImpl implements NutSorter {
                 }
             }
             didSorting = true;
-        } else if (node.getNut() != null &&     node.getNut().compareToBolt(pivotBolt) == EQUAL) {
+        } else if (node.getNut() != null && node.getNut().compareToBolt(pivotBolt) == EQUAL) {
             hasMatch = true;
         }
         if (!smallerNuts.isEmpty()) {
