@@ -19,7 +19,7 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
 
     public ConcurrentHashMap<Nut, Bolt> matchMyNutsAndBolts(final List<Nut> nuts,
                                                             final List<Bolt> bolts) {
-        iteration = 1L;
+        iteration = 0L;
         final NutNode masterNode = new NutNode(nuts);
         bolts.forEach(bolt -> doSort(masterNode, bolt));
         LoggingUtils.logSorted(sortedNutsAndBolts, iteration, ALGORITHM_NAME);
@@ -28,7 +28,7 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
 
     boolean doSort(final NutNode node,
                    final Bolt pivotBolt) {
-        ++iteration;
+        iteration++;
         boolean hasMatch = false;
         boolean didSorting = false;
         final List<Nut> nodeNuts = node.getNuts();
