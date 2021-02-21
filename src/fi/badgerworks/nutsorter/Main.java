@@ -18,12 +18,12 @@ public class Main {
         final List<Bolt> bolts = new ArrayList<>();
         initializeNutsAndBolts(nuts, bolts, COUNT);
         scrambleNutsAndBolts(nuts, bolts);
-        dummySort(new ArrayList<>(nuts), new ArrayList<>(bolts));
-        binarySort(new ArrayList<>(nuts), new ArrayList<>(bolts));
+        listSplitterSort(new ArrayList<>(nuts), new ArrayList<>(bolts));
+        binaryTreeSort(new ArrayList<>(nuts), new ArrayList<>(bolts));
     }
 
-    private static void dummySort(final List<Nut> nuts,
-                                  final List<Bolt> bolts) {
+    private static void listSplitterSort(final List<Nut> nuts,
+                                         final List<Bolt> bolts) {
         final NutSorter nutSorter = new ListSplitterNutSorterImpl();
         long startTime = System.nanoTime();
         nutSorter.matchMyNutsAndBolts(nuts, bolts);
@@ -31,8 +31,8 @@ public class Main {
         logDuration(startTime, endTime);
     }
 
-    private static void binarySort(final List<Nut> nuts,
-                                   final List<Bolt> bolts) {
+    private static void binaryTreeSort(final List<Nut> nuts,
+                                       final List<Bolt> bolts) {
         final NutSorter nutSorter = new BinaryTreeNutSorterImpl();
         long startTime = System.nanoTime();
         nutSorter.matchMyNutsAndBolts(nuts, bolts);
