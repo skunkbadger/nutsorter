@@ -7,13 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import static fi.badgerworks.nutsorter.ComparisonValue.EQUAL;
 import static fi.badgerworks.nutsorter.LoggingUtils.logError;
 
-public class NutSorterBinaryTreeImpl implements NutSorter {
+public class BinaryTreeNutSorterImpl implements NutSorter {
 
-    private final static String ALGORITHM_NAME_BINARY = "binary tree";
+    private final static String ALGORITHM_NAME = "binary tree";
     private final ConcurrentHashMap<Nut, Bolt> sortedNutsAndBolts;
     private Long iteration;
 
-    NutSorterBinaryTreeImpl() {
+    BinaryTreeNutSorterImpl() {
         sortedNutsAndBolts = new ConcurrentHashMap<>();
     }
 
@@ -21,10 +21,8 @@ public class NutSorterBinaryTreeImpl implements NutSorter {
                                                             final List<Bolt> bolts) {
         iteration = 1L;
         final NutNode masterNode = new NutNode(nuts);
-        bolts.forEach(bolt -> {
-            doSort(masterNode, bolt);
-        });
-        LoggingUtils.logSorted(sortedNutsAndBolts, iteration, ALGORITHM_NAME_BINARY);
+        bolts.forEach(bolt -> doSort(masterNode, bolt));
+        LoggingUtils.logSorted(sortedNutsAndBolts, iteration, ALGORITHM_NAME);
         return sortedNutsAndBolts;
     }
 
@@ -58,19 +56,13 @@ public class NutSorterBinaryTreeImpl implements NutSorter {
             }
             didSorting = true;
         } else if (node.getNut() != null && node.getNut().compareToBolt(pivotBolt) == EQUAL) {
+            sortedNutsAndBolts.put(node.getNut(), pivotBolt);
             hasMatch = true;
         }
-        if (!smallerNuts.isEmpty()) {
-            final NutNode leftNode = new NutNode(smallerNuts);
-            node.setLeftChildNode(leftNode);
-        }
-        if (!largerNuts.isEmpty()) {
-            final NutNode rightNode = new NutNode(largerNuts);
-            node.setRightChildNode(rightNode);
-        }
+        setNodeNuts(node, smallerNuts, largerNuts);
         if (didSorting) {
             node.resetNuts();
-        } else {
+        } else if (!hasMatch) {
             if (node.hasLeftChildNode()) {
                 hasMatch = doSort(node.getLeftChildNode(), pivotBolt);
             }
@@ -79,5 +71,18 @@ public class NutSorterBinaryTreeImpl implements NutSorter {
             }
         }
         return hasMatch;
+    }
+
+    private void setNodeNuts(final NutNode node,
+                             final List<Nut> smallerNuts,
+                             final List<Nut> largerNuts) {
+        if (!smallerNuts.isEmpty()) {
+            final NutNode leftNode = new NutNode(smallerNuts);
+            node.setLeftChildNode(leftNode);
+        }
+        if (!largerNuts.isEmpty()) {
+            final NutNode rightNode = new NutNode(largerNuts);
+            node.setRightChildNode(rightNode);
+        }
     }
 }

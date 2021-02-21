@@ -9,8 +9,8 @@ import static java.util.Collections.shuffle;
 
 public class Main {
 
-    final static boolean ENABLE_DEBUG_LOGGING = false;
-    final static boolean PRINT_RESULTS = true;
+    final static boolean ENABLE_DEBUG_LOGGING = true;
+    final static boolean PRINT_RESULTS = false;
 
     private final static int COUNT = 10;
 
@@ -25,7 +25,7 @@ public class Main {
 
     private static void dummySort(final List<Nut> nuts,
                                   final List<Bolt> bolts) {
-        final NutSorter nutSorter = new NutSorterDummyListSplitterImpl();
+        final NutSorter nutSorter = new ListSplitterNutSorterImpl();
         long startTime = System.nanoTime();
         nutSorter.matchMyNutsAndBolts(nuts, bolts);
         long endTime = System.nanoTime();
@@ -34,7 +34,7 @@ public class Main {
 
     private static void binarySort(final List<Nut> nuts,
                                    final List<Bolt> bolts) {
-        final NutSorter nutSorter = new NutSorterBinaryTreeImpl();
+        final NutSorter nutSorter = new BinaryTreeNutSorterImpl();
         long startTime = System.nanoTime();
         nutSorter.matchMyNutsAndBolts(nuts, bolts);
         long endTime = System.nanoTime();

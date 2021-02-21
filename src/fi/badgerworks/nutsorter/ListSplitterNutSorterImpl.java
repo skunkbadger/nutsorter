@@ -9,14 +9,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import static fi.badgerworks.nutsorter.ComparisonValue.EQUAL;
 import static fi.badgerworks.nutsorter.LoggingUtils.logError;
 
-public class NutSorterDummyListSplitterImpl implements NutSorter {
+public class ListSplitterNutSorterImpl implements NutSorter {
 
-    private final String ALGORITHM_NAME_SPLITTER = "matcher splitter";
+    private final String ALGORITHM_NAME = "list splitter";
 
     private final ConcurrentHashMap<Nut, Bolt> sortedNutsAndBolts;
     private Long iteration;
 
-    NutSorterDummyListSplitterImpl() {
+    ListSplitterNutSorterImpl() {
         sortedNutsAndBolts = new ConcurrentHashMap<>();
     }
 
@@ -24,7 +24,7 @@ public class NutSorterDummyListSplitterImpl implements NutSorter {
                                                             final List<Bolt> bolts) {
         iteration = 0L;
         checkForRecursion(nuts, bolts);
-        LoggingUtils.logSorted(sortedNutsAndBolts, iteration, ALGORITHM_NAME_SPLITTER);
+        LoggingUtils.logSorted(sortedNutsAndBolts, iteration, ALGORITHM_NAME);
         return sortedNutsAndBolts;
     }
 
