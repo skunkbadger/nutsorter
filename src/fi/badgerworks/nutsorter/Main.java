@@ -8,8 +8,8 @@ import static fi.badgerworks.nutsorter.Scrambler.scrambleNutsAndBolts;
 
 public class Main {
 
-    final static boolean ENABLE_DEBUG_LOGGING = true;
-    final static boolean PRINT_RESULTS = false;
+    final static boolean ENABLE_DEBUG_LOGGING = false;
+    final static boolean PRINT_RESULTS = true;
 
     private final static int COUNT = 10;
 
