@@ -31,10 +31,10 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
         ++iteration;
         boolean hasMatch = false;
         boolean didSorting = false;
-        final List<Nut> smallerNuts = new ArrayList<>();
-        final List<Nut> largerNuts = new ArrayList<>();
         final List<Nut> nodeNuts = node.getNuts();
         if (nodeNuts != null) {
+            final List<Nut> smallerNuts = new ArrayList<>();
+            final List<Nut> largerNuts = new ArrayList<>();
             for (final Nut nut : nodeNuts) {
                 final ComparisonValue comparison = nut.compareToBolt(pivotBolt);
                 switch (comparison) {
@@ -55,14 +55,12 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
                 }
             }
             didSorting = true;
+            setNodeNuts(node, smallerNuts, largerNuts);
         } else if (node.getNut() != null && node.getNut().compareToBolt(pivotBolt) == EQUAL) {
             sortedNutsAndBolts.put(node.getNut(), pivotBolt);
             hasMatch = true;
         }
-        setNodeNuts(node, smallerNuts, largerNuts);
-        if (didSorting) {
-            node.resetNuts();
-        } else if (!hasMatch) {
+        if (!didSorting && !hasMatch) {
             if (node.hasLeftChildNode()) {
                 hasMatch = doSort(node.getLeftChildNode(), pivotBolt);
             }
