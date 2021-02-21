@@ -33,19 +33,22 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
         recursions++;
         boolean hasMatch = false;
         boolean didSorting = false;
-        final List<Nut> nodeNuts = node.getNuts();
+        final List<Nut> nodeNuts = node.getUnorderedNuts();
         if (nodeNuts != null) {
             final List<Nut> smallerNuts = new ArrayList<>();
             final List<Nut> largerNuts = new ArrayList<>();
+            final List<Nut> equalNuts = new ArrayList<>();
             for (final Nut nut : nodeNuts) {
                 iterations++;
                 final ComparisonValue comparison = nut.compareToBolt(pivotBolt);
                 switch (comparison) {
                     case EQUAL:
-                        node.setMatchingBolt(pivotBolt);
-                        node.setNut(nut);
-                        sortedNutsAndBolts.put(nut, pivotBolt);
-                        hasMatch = true;
+                        if (!hasMatch) {
+                            nut.setBolt(pivotBolt);
+                            sortedNutsAndBolts.put(nut, pivotBolt);
+                            hasMatch = true;
+                        }
+                        equalNuts.add(nut);
                         break;
                     case SMALLER:
                         smallerNuts.add(nut);
@@ -58,10 +61,16 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
                 }
             }
             didSorting = true;
-            setNodeNuts(node, smallerNuts, largerNuts);
-        } else if (node.getNut() != null && node.getNut().compareToBolt(pivotBolt) == EQUAL) {
-            sortedNutsAndBolts.put(node.getNut(), pivotBolt);
-            hasMatch = true;
+            setNodeNuts(node, smallerNuts, largerNuts, equalNuts);
+            node.resetNuts();
+        } else {
+            final Nut unusedNut = node.getUnusedNut();
+            if (unusedNut != null && unusedNut.compareToBolt(pivotBolt) == EQUAL) {
+                unusedNut.setBolt(pivotBolt);
+                sortedNutsAndBolts.put(unusedNut, pivotBolt);
+
+                hasMatch = true;
+            }
         }
         if (!didSorting && !hasMatch) {
             if (node.hasLeftChildNode()) {
@@ -76,7 +85,9 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
 
     private void setNodeNuts(final NutNode node,
                              final List<Nut> smallerNuts,
-                             final List<Nut> largerNuts) {
+                             final List<Nut> largerNuts,
+                             final List<Nut> equalNuts) {
+        node.setNuts(equalNuts);
         if (!smallerNuts.isEmpty()) {
             final NutNode leftNode = new NutNode(smallerNuts);
             node.setLeftChildNode(leftNode);

@@ -62,12 +62,18 @@ public class ListSplitterNutSorterImpl implements NutSorter {
         }
         final List smallerNuts = new ArrayList<Nut>();
         final List largerNuts = new ArrayList<Nut>();
+        boolean matchFound = false;
         for (final Nut nut : nuts) {
             iterations++;
             final ComparisonValue comparison = nut.compareToBolt(pivotBolt);
             switch (comparison) {
                 case EQUAL:
-                    pivotNut = nut;
+                    if (!matchFound) {
+                        pivotNut = nut;
+                        matchFound = true;
+                    } else {
+                        largerNuts.add(nut);
+                    }
                     break;
                 case SMALLER:
                     smallerNuts.add(nut);
@@ -96,6 +102,10 @@ public class ListSplitterNutSorterImpl implements NutSorter {
                     break;
                 case LARGER:
                     largerBolts.add(bolt);
+                    break;
+                case EQUAL:
+                    largerBolts.add(bolt);
+                    // Do nothing, not looking for equal sized bolts;
                     break;
                 default:
                     logError("Guru meditation at bolt loop: " + comparison);

@@ -4,27 +4,18 @@ import java.util.List;
 
 class NutNode {
 
-    private List<Nut> nuts;
+    private List<Nut> unorderedNuts;
 
     private NutNode leftChildNode;
     private NutNode rightChildNode;
 
-    private Nut nut;
-    private Bolt matchingBolt;
+    private List<Nut> nuts;
 
-    NutNode(final List<Nut> nuts) {
-        this.nuts = nuts;
+    NutNode(final List<Nut> unorderedNuts) {
+        this.unorderedNuts = unorderedNuts;
     }
 
-    void setMatchingBolt(final Bolt nut) {
-        matchingBolt = nut;
-    }
-
-    boolean hasMatch() {
-        return matchingBolt != null;
-    }
-
-    public NutNode getLeftChildNode() {
+    NutNode getLeftChildNode() {
         return leftChildNode;
     }
 
@@ -48,19 +39,26 @@ class NutNode {
         return rightChildNode != null;
     }
 
-    Nut getNut() {
-        return nut;
+    Nut getUnusedNut() {
+        if (nuts != null) {
+            for (final Nut nut : nuts) {
+                if (!nut.hasPair()) {
+                    return nut;
+                }
+            }
+        }
+        return null;
     }
 
-    public void setNut(final Nut nut) {
-        this.nut = nut;
+    void setNuts(final List<Nut> nuts) {
+        this.nuts = nuts;
     }
 
-    public List<Nut> getNuts() {
-        return nuts;
+    List<Nut> getUnorderedNuts() {
+        return unorderedNuts;
     }
 
-    public void resetNuts() {
-        nuts = null;
+    void resetNuts() {
+        unorderedNuts = null;
     }
 }
