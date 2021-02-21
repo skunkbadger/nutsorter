@@ -1,5 +1,5 @@
 # nutsorter
-Matching nuts and bolts with my own algorithm.
+Matching nuts and bolts with my own algorithms.
 
 Rules:
 1) You have a set of different sized matching nuts and bolts that are scrambled in random order into two piles, one pile for nuts, one pile for bolts.
