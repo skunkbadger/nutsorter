@@ -5,7 +5,6 @@ import java.util.List;
 
 import static fi.badgerworks.nutsorter.LoggingUtils.logDuration;
 import static fi.badgerworks.nutsorter.Scrambler.scrambleNutsAndBolts;
-import static java.util.Collections.shuffle;
 
 public class Main {
 
@@ -48,11 +47,5 @@ public class Main {
             bolts.add(new Bolt(i, "Bolt " + i));
             nuts.add(new Nut(i, "Nut " + i));
         }
-    }
-
-    private static void shuffleNutsAndBolts(final List<Nut> nuts,
-                                            final List<Bolt> bolts) {
-        shuffle(nuts);
-        shuffle(bolts);
     }
 }
