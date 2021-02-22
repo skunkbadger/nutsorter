@@ -3,7 +3,7 @@ package fi.badgerworks.nutsorter.model;
 public class Bolt extends AbstractFastener {
 
     public Bolt(final int size,
-         final String name) {
+                final String name) {
         super(size, name);
     }
 

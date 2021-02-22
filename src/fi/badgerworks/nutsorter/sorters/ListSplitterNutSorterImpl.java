@@ -11,8 +11,8 @@ import fi.badgerworks.nutsorter.model.Bolt;
 import fi.badgerworks.nutsorter.model.ComparisonValue;
 import fi.badgerworks.nutsorter.model.Nut;
 import fi.badgerworks.nutsorter.util.LoggingUtils;
-import static fi.badgerworks.nutsorter.model.ComparisonValue.EQUAL;
 import static fi.badgerworks.nutsorter.Main.LIST_SPLITTER_PARALLELISM_ENABLED;
+import static fi.badgerworks.nutsorter.model.ComparisonValue.EQUAL;
 import static fi.badgerworks.nutsorter.util.LoggingUtils.*;
 
 public class ListSplitterNutSorterImpl implements NutSorter {

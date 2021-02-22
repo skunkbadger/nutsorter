@@ -5,7 +5,7 @@ public class Nut extends AbstractFastener {
     Bolt bolt;
 
     public Nut(final int size,
-        final String name) {
+               final String name) {
         super(size, name);
     }
 
