@@ -82,9 +82,9 @@ public class ListSplitterNutSorterImpl implements NutSorter {
     }
 
     private Nut splitNuts(final List<Nut> nutsToSplit,
-                              final List<Nut> smallerNuts,
-                              final List<Nut> largerNuts,
-                              final Bolt pivotBolt) {
+                          final List<Nut> smallerNuts,
+                          final List<Nut> largerNuts,
+                          final Bolt pivotBolt) {
         Nut pivotNut = null;
         boolean matchFound = false;
         for (final Nut nut : nutsToSplit) {
