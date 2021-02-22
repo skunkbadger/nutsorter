@@ -20,7 +20,7 @@ public class Main {
 
     private final static int COUNT = 10;
     private final static int MIN_SIZE = 4;
-    private final static int SIZE_COUNT = 4; // How many different sizes are there for bolts and nuts
+    private final static int SIZE_COUNT = 4; // How many different sizes can there be for bolts and nuts
     private final static boolean UNIQUE_BOLTS_AND_NUTS = false;
 
     public static void main(String[] args) {
