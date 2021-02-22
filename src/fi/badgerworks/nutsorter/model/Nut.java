@@ -1,15 +1,15 @@
-package fi.badgerworks.nutsorter;
+package fi.badgerworks.nutsorter.model;
 
-class Nut extends AbstractFastener {
+public class Nut extends AbstractFastener {
 
     Bolt bolt;
 
-    Nut(final int size,
+    public Nut(final int size,
         final String name) {
         super(size, name);
     }
 
-    ComparisonValue compareToBolt(final Bolt bolt) {
+    public ComparisonValue compareToBolt(final Bolt bolt) {
         final int nutSize = super.getSize();
         final int boltSize = bolt.getSize();
         if (nutSize < boltSize) {
@@ -20,11 +20,11 @@ class Nut extends AbstractFastener {
         return ComparisonValue.EQUAL;
     }
 
-    boolean hasPair() {
+    public boolean hasPair() {
         return bolt != null;
     }
 
-    void setBolt(final Bolt bolt) {
+    public void setBolt(final Bolt bolt) {
         this.bolt = bolt;
     }
 

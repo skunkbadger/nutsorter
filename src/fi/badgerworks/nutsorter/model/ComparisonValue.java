@@ -1,4 +1,4 @@
-package fi.badgerworks.nutsorter;
+package fi.badgerworks.nutsorter.model;
 
 public enum ComparisonValue {
     SMALLER,

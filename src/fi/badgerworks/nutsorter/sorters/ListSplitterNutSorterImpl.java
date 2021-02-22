@@ -1,4 +1,4 @@
-package fi.badgerworks.nutsorter;
+package fi.badgerworks.nutsorter.sorters;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,9 +7,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static fi.badgerworks.nutsorter.ComparisonValue.EQUAL;
-import static fi.badgerworks.nutsorter.LoggingUtils.logError;
+import fi.badgerworks.nutsorter.model.Bolt;
+import fi.badgerworks.nutsorter.model.ComparisonValue;
+import fi.badgerworks.nutsorter.model.Nut;
+import fi.badgerworks.nutsorter.util.LoggingUtils;
+import static fi.badgerworks.nutsorter.model.ComparisonValue.EQUAL;
 import static fi.badgerworks.nutsorter.Main.LIST_SPLITTER_PARALLELISM_ENABLED;
+import static fi.badgerworks.nutsorter.util.LoggingUtils.*;
 
 public class ListSplitterNutSorterImpl implements NutSorter {
 
@@ -19,7 +23,7 @@ public class ListSplitterNutSorterImpl implements NutSorter {
     private AtomicInteger recursions;
     private AtomicInteger iterations;
 
-    ListSplitterNutSorterImpl() {
+    public ListSplitterNutSorterImpl() {
         sortedNutsAndBolts = new ConcurrentHashMap<>();
         recursions = new AtomicInteger();
         iterations = new AtomicInteger();
@@ -30,7 +34,7 @@ public class ListSplitterNutSorterImpl implements NutSorter {
         recursions.set(0);
         iterations.set(0);
         checkForRecursion(nuts, bolts);
-        LoggingUtils.logSorted(sortedNutsAndBolts, recursions, iterations, ALGORITHM_NAME);
+        logSorted(sortedNutsAndBolts, recursions, iterations, ALGORITHM_NAME);
         return sortedNutsAndBolts;
     }
 
@@ -41,7 +45,7 @@ public class ListSplitterNutSorterImpl implements NutSorter {
                 final Bolt pivotBolt = bolts.get(0);
                 final Nut pivotNut = nuts.get(0);
                 if (pivotNut.compareToBolt(pivotBolt) == EQUAL) {
-                    LoggingUtils.logSingleMatch(pivotNut, pivotBolt);
+                    logSingleMatch(pivotNut, pivotBolt);
                     sortedNutsAndBolts.put(pivotNut, pivotBolt);
                 } else {
                     logError("Epic nuts and bolts sorting mismatch! Fire some Chinese personnel and cut wages!");

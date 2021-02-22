@@ -1,7 +1,10 @@
-package fi.badgerworks.nutsorter;
+package fi.badgerworks.nutsorter.sorters;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import fi.badgerworks.nutsorter.model.Bolt;
+import fi.badgerworks.nutsorter.model.Nut;
 
 public interface NutSorter {
 

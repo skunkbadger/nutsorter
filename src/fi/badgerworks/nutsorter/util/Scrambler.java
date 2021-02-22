@@ -1,7 +1,10 @@
-package fi.badgerworks.nutsorter;
+package fi.badgerworks.nutsorter.util;
 
 import java.util.Collections;
 import java.util.List;
+
+import fi.badgerworks.nutsorter.model.Bolt;
+import fi.badgerworks.nutsorter.model.Nut;
 
 public interface Scrambler {
 

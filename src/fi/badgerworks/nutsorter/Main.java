@@ -4,14 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static fi.badgerworks.nutsorter.LoggingUtils.logDuration;
-import static fi.badgerworks.nutsorter.Scrambler.scrambleNutsAndBolts;
+import fi.badgerworks.nutsorter.model.Bolt;
+import fi.badgerworks.nutsorter.model.Nut;
+import fi.badgerworks.nutsorter.sorters.BinaryTreeNutSorterImpl;
+import fi.badgerworks.nutsorter.sorters.ListSplitterNutSorterImpl;
+import fi.badgerworks.nutsorter.sorters.NutSorter;
+import static fi.badgerworks.nutsorter.util.LoggingUtils.logDuration;
+import static fi.badgerworks.nutsorter.util.Scrambler.scrambleNutsAndBolts;
 
 public class Main {
 
-    final static boolean LIST_SPLITTER_PARALLELISM_ENABLED = false;
-    final static boolean ENABLE_DEBUG_LOGGING = false;
-    final static boolean PRINT_RESULTS = true;
+    public final static boolean LIST_SPLITTER_PARALLELISM_ENABLED = false;
+    public final static boolean ENABLE_DEBUG_LOGGING = false;
+    public final static boolean PRINT_RESULTS = true;
 
     private final static int COUNT = 10;
     private final static int MIN_SIZE = 4;

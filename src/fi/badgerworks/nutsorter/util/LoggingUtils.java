@@ -1,13 +1,15 @@
-package fi.badgerworks.nutsorter;
+package fi.badgerworks.nutsorter.util;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import fi.badgerworks.nutsorter.model.Bolt;
+import fi.badgerworks.nutsorter.model.Nut;
 import static fi.badgerworks.nutsorter.Main.ENABLE_DEBUG_LOGGING;
 import static fi.badgerworks.nutsorter.Main.PRINT_RESULTS;
 
-interface LoggingUtils {
+public interface LoggingUtils {
 
     static void logDuration(final long startTime,
                             final long endTime) {

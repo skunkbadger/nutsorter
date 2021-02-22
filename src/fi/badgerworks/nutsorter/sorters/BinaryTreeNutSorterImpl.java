@@ -1,12 +1,17 @@
-package fi.badgerworks.nutsorter;
+package fi.badgerworks.nutsorter.sorters;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static fi.badgerworks.nutsorter.ComparisonValue.EQUAL;
-import static fi.badgerworks.nutsorter.LoggingUtils.logError;
+import fi.badgerworks.nutsorter.model.Bolt;
+import fi.badgerworks.nutsorter.model.ComparisonValue;
+import fi.badgerworks.nutsorter.model.Nut;
+import fi.badgerworks.nutsorter.model.NutNode;
+import static fi.badgerworks.nutsorter.model.ComparisonValue.EQUAL;
+import static fi.badgerworks.nutsorter.util.LoggingUtils.logError;
+import static fi.badgerworks.nutsorter.util.LoggingUtils.logSorted;
 
 public class BinaryTreeNutSorterImpl implements NutSorter {
 
@@ -15,7 +20,7 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
     private AtomicInteger recursions;
     private AtomicInteger iterations;
 
-    BinaryTreeNutSorterImpl() {
+    public BinaryTreeNutSorterImpl() {
         sortedNutsAndBolts = new ConcurrentHashMap<>();
         recursions = new AtomicInteger();
         iterations = new AtomicInteger();
@@ -27,7 +32,7 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
         recursions.set(0);
         final NutNode masterNode = new NutNode(nuts);
         bolts.forEach(bolt -> doSort(masterNode, bolt));
-        LoggingUtils.logSorted(sortedNutsAndBolts, recursions, iterations, ALGORITHM_NAME);
+        logSorted(sortedNutsAndBolts, recursions, iterations, ALGORITHM_NAME);
         return sortedNutsAndBolts;
     }
 

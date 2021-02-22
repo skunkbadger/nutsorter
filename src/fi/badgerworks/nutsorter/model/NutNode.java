@@ -1,8 +1,8 @@
-package fi.badgerworks.nutsorter;
+package fi.badgerworks.nutsorter.model;
 
 import java.util.List;
 
-class NutNode {
+public class NutNode {
 
     private List<Nut> unorderedNuts;
 
@@ -11,35 +11,35 @@ class NutNode {
 
     private List<Nut> nuts;
 
-    NutNode(final List<Nut> unorderedNuts) {
+    public NutNode(final List<Nut> unorderedNuts) {
         this.unorderedNuts = unorderedNuts;
     }
 
-    NutNode getLeftChildNode() {
+    public NutNode getLeftChildNode() {
         return leftChildNode;
     }
 
-    void setLeftChildNode(final NutNode leftChildNode) {
+    public void setLeftChildNode(final NutNode leftChildNode) {
         this.leftChildNode = leftChildNode;
     }
 
-    boolean hasLeftChildNode() {
+    public boolean hasLeftChildNode() {
         return leftChildNode != null;
     }
 
-    NutNode getRightChildNode() {
+    public NutNode getRightChildNode() {
         return rightChildNode;
     }
 
-    void setRightChildNode(final NutNode rightChildNode) {
+    public void setRightChildNode(final NutNode rightChildNode) {
         this.rightChildNode = rightChildNode;
     }
 
-    boolean hasRightChildNode() {
+    public boolean hasRightChildNode() {
         return rightChildNode != null;
     }
 
-    Nut getUnusedNut() {
+    public Nut getUnusedNut() {
         if (nuts != null) {
             for (final Nut nut : nuts) {
                 if (!nut.hasPair()) {
@@ -50,15 +50,15 @@ class NutNode {
         return null;
     }
 
-    void setNuts(final List<Nut> nuts) {
+    public void setNuts(final List<Nut> nuts) {
         this.nuts = nuts;
     }
 
-    List<Nut> getUnorderedNuts() {
+    public List<Nut> getUnorderedNuts() {
         return unorderedNuts;
     }
 
-    void resetNuts() {
+    public void resetNuts() {
         unorderedNuts = null;
     }
 }

@@ -1,4 +1,4 @@
-package fi.badgerworks.nutsorter;
+package fi.badgerworks.nutsorter.model;
 
 abstract class AbstractFastener {
 
@@ -11,11 +11,11 @@ abstract class AbstractFastener {
         this.name = name;
     }
 
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
-    int getSize() {
+    public int getSize() {
         return this.size;
     }
 }
