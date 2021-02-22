@@ -10,9 +10,9 @@ class Bolt extends AbstractFastener {
     ComparisonValue compareToNut(final Nut nut) {
         final int boltSize = super.getSize();
         final int nutSize = nut.getSize();
-        if (nutSize < boltSize) {
+        if (boltSize < nutSize) {
             return ComparisonValue.SMALLER;
-        } else if (nutSize > boltSize) {
+        } else if (boltSize > nutSize) {
             return ComparisonValue.LARGER;
         }
         return ComparisonValue.EQUAL;
