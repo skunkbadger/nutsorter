@@ -20,8 +20,8 @@ public class ListSplitterNutSorterImpl implements NutSorter {
     private final String ALGORITHM_NAME = "list splitter";
 
     private final ConcurrentHashMap<Nut, Bolt> sortedNutsAndBolts;
-    private AtomicInteger recursions;
-    private AtomicInteger iterations;
+    final private AtomicInteger recursions;
+    final private AtomicInteger iterations;
 
     public ListSplitterNutSorterImpl() {
         sortedNutsAndBolts = new ConcurrentHashMap<>();
@@ -56,20 +56,38 @@ public class ListSplitterNutSorterImpl implements NutSorter {
         }
     }
 
-    private void doSort(final List<Nut> nuts,
-                        final List<Bolt> bolts) {
+    private void doSort(final List<Nut> nutsToSplit,
+                        final List<Bolt> boltsToSplit) {
         final int currentIteration;
         currentIteration = recursions.getAndAdd(1);
         final Bolt pivotBolt;
-        Nut pivotNut = null;
-        pivotBolt = bolts.get(0);
+        // Picking first "random" bolt as pivot bolt
+        pivotBolt = boltsToSplit.get(0);
         if (pivotBolt == null) {
             logError("Epic fail, our pivot bolt was null!");
         }
-        final List smallerNuts = new ArrayList<Nut>();
-        final List largerNuts = new ArrayList<Nut>();
+        final List<Nut> smallerNuts = new ArrayList<>();
+        final List<Nut> largerNuts = new ArrayList<>();
+        final Nut pivotNut = splitNuts(nutsToSplit, smallerNuts, largerNuts, pivotBolt);
+        if (pivotNut == null) {
+            logError("Epic fail, our pivot nut was null!");
+        }
+        final List<Bolt> smallerBolts = new ArrayList<>();
+        final List<Bolt> largerBolts = new ArrayList<>();
+        splitBolts(boltsToSplit, smallerBolts, largerBolts, pivotBolt, pivotNut);
+        LoggingUtils.logNutsAndBolts(pivotNut, pivotBolt, nutsToSplit, boltsToSplit, currentIteration);
+        sortedNutsAndBolts.put(pivotNut, pivotBolt);
+
+        processNutsAndBolts(smallerNuts, smallerBolts, largerNuts, largerBolts);
+    }
+
+    private Nut splitNuts(final List<Nut> nutsToSplit,
+                              final List<Nut> smallerNuts,
+                              final List<Nut> largerNuts,
+                              final Bolt pivotBolt) {
+        Nut pivotNut = null;
         boolean matchFound = false;
-        for (final Nut nut : nuts) {
+        for (final Nut nut : nutsToSplit) {
             iterations.addAndGet(1);
             final ComparisonValue comparison = nut.compareToBolt(pivotBolt);
             switch (comparison) {
@@ -78,6 +96,7 @@ public class ListSplitterNutSorterImpl implements NutSorter {
                         pivotNut = nut;
                         matchFound = true;
                     } else {
+                        // Adding duplicate equal sized nuts to largerNuts
                         largerNuts.add(nut);
                     }
                     break;
@@ -91,12 +110,15 @@ public class ListSplitterNutSorterImpl implements NutSorter {
                     logError("Guru meditation at nut loop: " + comparison);
             }
         }
-        if (pivotNut == null) {
-            logError("Epic fail, our pivot nut was null!");
-        }
-        final List smallerBolts = new ArrayList<Bolt>();
-        final List largerBolts = new ArrayList<Bolt>();
-        for (final Bolt bolt : bolts) {
+        return pivotNut;
+    }
+
+    private void splitBolts(final List<Bolt> boltsToSplit,
+                            final List<Bolt> smallerBolts,
+                            final List<Bolt> largerBolts,
+                            final Bolt pivotBolt,
+                            final Nut pivotNut) {
+        for (final Bolt bolt : boltsToSplit) {
             iterations.addAndGet(1);
             if (bolt.equals(pivotBolt)) {
                 continue;
@@ -110,16 +132,13 @@ public class ListSplitterNutSorterImpl implements NutSorter {
                     largerBolts.add(bolt);
                     break;
                 case EQUAL:
+                    // Adding equal sized bolts to largerBolts
                     largerBolts.add(bolt);
                     break;
                 default:
                     logError("Guru meditation at bolt loop: " + comparison);
             }
         }
-        LoggingUtils.logNutsAndBolts(pivotNut, pivotBolt, nuts, bolts, currentIteration);
-        sortedNutsAndBolts.put(pivotNut, pivotBolt);
-
-        processNutsAndBolts(smallerNuts, smallerBolts, largerNuts, largerBolts);
     }
 
     private void processNutsAndBolts(final List<Nut> smallerNuts,

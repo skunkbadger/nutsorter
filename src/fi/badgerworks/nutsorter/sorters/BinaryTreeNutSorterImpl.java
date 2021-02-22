@@ -17,8 +17,8 @@ public class BinaryTreeNutSorterImpl implements NutSorter {
 
     private final static String ALGORITHM_NAME = "binary tree";
     private final ConcurrentHashMap<Nut, Bolt> sortedNutsAndBolts;
-    private AtomicInteger recursions;
-    private AtomicInteger iterations;
+    final private AtomicInteger recursions;
+    final private AtomicInteger iterations;
 
     public BinaryTreeNutSorterImpl() {
         sortedNutsAndBolts = new ConcurrentHashMap<>();
